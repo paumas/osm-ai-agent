@@ -20,33 +20,7 @@ This is a chat assistant for OpenStreetMap (OSM) related questions, built with N
     ```
 
 3.  **Prepare your data:**
-    - Add your Markdown files containing the knowledge base to the `data/` directory. Sample files (`osm_basics.md`, `osm_editing.md`) are provided.
-
-4.  **Configure Ollama Integration (Important):**
-    - The current backend API route in `src/app/api/chat/route.ts` uses placeholder embeddings (`FakeEmbeddings`) and a placeholder LLM (`ChatOpenAI` with a fake API key).
-    - To use Ollama:
-        - You will need to modify `src/app/api/chat/route.ts`.
-        - Replace `FakeEmbeddings` with `OllamaEmbeddings` from `langchain/embeddings/ollama`.
-        - Replace the placeholder `ChatOpenAI` LLM with `Ollama` from `langchain/llms/ollama` or `ChatOllama` from `langchain/chat_models/ollama`.
-        - Configure these with your Ollama instance details (base URL, model name). Example for Ollama LLM:
-          ```typescript
-          import { Ollama } from "langchain/llms/ollama";
-
-          const llm = new Ollama({
-            baseUrl: "http://localhost:11434", // Your Ollama server URL
-            model: "llama2", // Your desired model
-          });
-          ```
-        - Example for Ollama Embeddings:
-          ```typescript
-          import { OllamaEmbeddings } from "@langchain/community/embeddings/ollama"; // check exact import path
-
-          const embeddings = new OllamaEmbeddings({
-            model: "llama2", // Model for embeddings
-            baseUrl: "http://localhost:11434", // Your Ollama server URL
-          });
-          ```
-        - Ensure the LangChain community package for Ollama is installed if needed: `npm install @langchain/community`
+    - Add your Markdown files containing the knowledge base to the `data/` directory.
 
 ## Running the Application
 
@@ -56,11 +30,11 @@ This is a chat assistant for OpenStreetMap (OSM) related questions, built with N
     # or
     # yarn dev
     ```
-2.  Open your browser and navigate to `http://localhost:3000/chat` (or the port specified in your console).
+2.  Open your browser and navigate to `http://localhost:3000` (or the port specified in your console).
 
 ## How it Works
 
--   The frontend is built using `assistant-ui` and is accessible at the `/chat` page.
+-   The frontend is built using `assistant-ui`.
 -   When you send a message, the frontend calls the backend API at `/api/chat`.
 -   The backend API route (`src/app/api/chat/route.ts`) uses a RAG pipeline:
     1.  Loads Markdown documents from the `/data` directory.
@@ -70,9 +44,3 @@ This is a chat assistant for OpenStreetMap (OSM) related questions, built with N
     5.  Retrieves relevant chunks based on your query.
     6.  Uses an LLM (which you'll configure to be Ollama) to generate an answer based on the retrieved context.
 -   The response is then displayed in the chat interface.
-
-## Customization
-
--   **Knowledge Base:** Add or modify Markdown files in the `/data` directory.
--   **RAG Pipeline:** Adjust chunking strategy, embedding models, LLM models, and prompting in `src/app/api/chat/route.ts`.
--   **UI:** Customize the `assistant-ui` components in `src/app/chat/page.tsx`.

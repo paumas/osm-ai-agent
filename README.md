@@ -4,9 +4,9 @@ This is a chat assistant for OpenStreetMap (OSM) related questions, built with N
 
 ## Prerequisites
 
-- Node.js (version 18.x or later recommended)
+- Node.js (version 20.x or later recommended)
 - npm or yarn
-- An instance of Ollama running locally. Ensure you have pulled a model suitable for chat and embeddings (e.g., `ollama pull llama3` or another model of your choice).
+- An instance of Ollama (https://ollama.com/) running locally. Ensure you have pulled a model suitable for chat and embeddings (e.g., `ollama pull llama3.1:8b` or another model of your choice).
 
 ## Setup
 
@@ -18,9 +18,17 @@ This is a chat assistant for OpenStreetMap (OSM) related questions, built with N
     # or
     # yarn install
     ```
+    
+3. **Configure Ollama:**
+    - Ensure you have Ollama installed and running.
+    - You can pull a model using:
+      ```bash
+      ollama pull llama3.1:8b
+      ```
+    - Adjust the model name in the code if you are using a different model.
 
-3.  **Prepare your data:**
-    - Add your Markdown files containing the knowledge base to the `data/` directory.
+4.  **Prepare your data:**
+    - Add your Markdown files containing the knowledge base to the `data/` directory. Sample files (`osm_basics.md`, `osm_editing.md`) are provided.
 
 ## Running the Application
 
@@ -30,11 +38,11 @@ This is a chat assistant for OpenStreetMap (OSM) related questions, built with N
     # or
     # yarn dev
     ```
-2.  Open your browser and navigate to `http://localhost:3000` (or the port specified in your console).
+2.  Open your browser and navigate to `http://localhost:3000/chat` (or the port specified in your console).
 
 ## How it Works
 
--   The frontend is built using `assistant-ui`.
+-   The frontend is built using `assistant-ui` and is accessible at the `/chat` page.
 -   When you send a message, the frontend calls the backend API at `/api/chat`.
 -   The backend API route (`src/app/api/chat/route.ts`) uses a RAG pipeline:
     1.  Loads Markdown documents from the `/data` directory.

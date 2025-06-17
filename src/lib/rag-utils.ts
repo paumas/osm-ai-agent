@@ -3,12 +3,12 @@ import path from 'path';
 import { Document } from '@langchain/core/documents';
 import { RecursiveCharacterTextSplitter } from 'langchain/text_splitter';
 import { OllamaEmbeddings } from '@langchain/ollama';
-import { MemoryVectorStore } from '@langchain/community/vectorstores/memory';
+import { MemoryVectorStore } from "langchain/vectorstores/memory";
 
 // Define a constant for the data directory
 const DATA_DIR = path.join(process.cwd(), 'data');
 const OLLAMA_BASE_URL = process.env.OLLAMA_BASE_URL || 'http://localhost:11434';
-const OLLAMA_EMBEDDING_MODEL = process.env.OLLAMA_EMBEDDING_MODEL || 'llama3'; // Or another suitable embedding model like 'nomic-embed-text'
+const OLLAMA_EMBEDDING_MODEL = process.env.OLLAMA_EMBEDDING_MODEL || 'llama3.1:8b';
 
 // Cache for the initialized vector store
 let vectorStore: MemoryVectorStore | null = null;
@@ -21,7 +21,7 @@ async function loadAndProcessDocuments(): Promise<Document[]> {
     try {
       await fs.access(DATA_DIR);
     } catch (e) {
-      console.warn(`RAG: Data directory not found: ${DATA_DIR}. No documents will be loaded.`);
+      console.warn(`RAG: Data directory not found: ${DATA_DIR}. No documents will be loaded.`, e);
       return [];
     }
 
@@ -57,16 +57,16 @@ export async function getVectorStore(): Promise<MemoryVectorStore> {
     return vectorStore;
   }
 
+  const embeddings = new OllamaEmbeddings({
+    model: OLLAMA_EMBEDDING_MODEL,
+    baseUrl: OLLAMA_BASE_URL,
+  });
+
   console.log('RAG: Initializing new vector store...');
   const docs = await loadAndProcessDocuments();
 
   if (docs.length === 0) {
     console.warn('RAG: No documents loaded, initializing an empty vector store.');
-    // Initialize with dummy embedding for empty store to prevent errors with some vector store versions
-    const embeddings = new OllamaEmbeddings({
-        model: OLLAMA_EMBEDDING_MODEL,
-        baseUrl: OLLAMA_BASE_URL,
-    });
     // Create an empty vector store; it's up to the calling code to handle it
     // For MemoryVectorStore, it can be initialized without documents directly
     vectorStore = new MemoryVectorStore(embeddings);
@@ -77,18 +77,13 @@ export async function getVectorStore(): Promise<MemoryVectorStore> {
     chunkSize: 1000, // Aim for chunks of this many characters
     chunkOverlap: 200, // Overlap between chunks
   });
+
   const splitDocs = await textSplitter.splitDocuments(docs);
   console.log(`RAG: Split into ${splitDocs.length} document chunks.`);
 
-  const embeddings = new OllamaEmbeddings({
-    model: OLLAMA_EMBEDDING_MODEL, // Ensure this model is suitable for embeddings
-    baseUrl: OLLAMA_BASE_URL,
-  });
-
   try {
     console.log('RAG: Generating embeddings and creating vector store...');
-    const store = await MemoryVectorStore.fromDocuments(splitDocs, embeddings);
-    vectorStore = store;
+    vectorStore = await MemoryVectorStore.fromDocuments(splitDocs, embeddings);
     console.log('RAG: Vector store initialized and cached.');
     return vectorStore;
   } catch (e) {

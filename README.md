@@ -29,7 +29,7 @@ This is a chat assistant for OpenStreetMap (OSM) related questions, built with N
     - Adjust the model name in the code if you are using a different model.
 
 4.  **Prepare your data:**
-    - Add your Markdown files containing the knowledge base to the `data/` directory. Sample files (`osm_basics.md`, `osm_editing.md`) are provided.
+    - Add your Markdown files containing the knowledge base to the `data/` directory.
 
 ## Running the Application
 
@@ -39,11 +39,11 @@ This is a chat assistant for OpenStreetMap (OSM) related questions, built with N
     # or
     # yarn dev
     ```
-2.  Open your browser and navigate to `http://localhost:3000/chat` (or the port specified in your console).
+2.  Open your browser and navigate to `http://localhost:3000` (or the port specified in your console).
 
 ## How it Works
 
--   The frontend is built using `assistant-ui` and is accessible at the `/chat` page.
+-   The frontend is built using `assistant-ui`.
 -   When you send a message, the frontend calls the backend API at `/api/chat`.
 -   The backend API route (`src/app/api/chat/route.ts`) uses a RAG pipeline:
     1.  Loads Markdown documents from the `/data` directory.

@@ -24,6 +24,7 @@ This is a chat assistant for OpenStreetMap (OSM) related questions, built with N
     - You can pull a model using:
       ```bash
       ollama pull llama3.1:8b
+      ollama pull bge-m3
       ```
     - Adjust the model name in the code if you are using a different model.
 

@@ -8,7 +8,7 @@ import { MemoryVectorStore } from "langchain/vectorstores/memory";
 // Define a constant for the data directory
 const DATA_DIR = path.join(process.cwd(), 'data');
 const OLLAMA_BASE_URL = process.env.OLLAMA_BASE_URL || 'http://localhost:11434';
-const OLLAMA_EMBEDDING_MODEL = process.env.OLLAMA_EMBEDDING_MODEL || 'llama3.1:8b';
+const OLLAMA_EMBEDDING_MODEL = process.env.OLLAMA_EMBEDDING_MODEL || 'bge-m3';
 
 // Cache for the initialized vector store
 let vectorStore: MemoryVectorStore | null = null;

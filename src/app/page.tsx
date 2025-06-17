@@ -11,7 +11,6 @@ export default function Page() {
 
     return (
         <div className="flex flex-col h-screen bg-gray-50">
-            {/* Header */}
             <header className="bg-white shadow-sm border-b border-gray-200 p-4">
                 <div className="max-w-4xl mx-auto">
                     <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
@@ -61,25 +60,6 @@ export default function Page() {
                     </div>
                 </div>
             </footer>
-
-            {/* Welcome message overlay for first visit */}
-            <div className="hidden" id="welcome-overlay">
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-                    <div className="bg-white rounded-lg max-w-2xl w-full p-6 max-h-[80vh] overflow-y-auto">
-                        <div className="prose prose-sm max-w-none">
-                            {/*<MarkdownText content={WELCOME_MESSAGE} />*/}
-                        </div>
-                        <div className="mt-6 flex justify-end">
-                            <button
-                                onClick={() => document.getElementById('welcome-overlay')?.classList.add('hidden')}
-                                className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-                            >
-                                Pradėti
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
     );
 };

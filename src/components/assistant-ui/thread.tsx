@@ -6,7 +6,7 @@ import {
   MessagePrimitive,
   ThreadPrimitive,
 } from "@assistant-ui/react";
-import type { FC } from "react";
+import {FC, useEffect, useState} from "react";
 import {
   ArrowDownIcon,
   CheckIcon,
@@ -22,6 +22,33 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { MarkdownText } from "@/components/assistant-ui/markdown-text";
 import { TooltipIconButton } from "@/components/assistant-ui/tooltip-icon-button";
+import { remark } from "remark";
+import html from 'remark-html';
+
+const WELCOME_MESSAGE: string = `
+# Sveiki! 👋
+
+Esu **Lietuvos OSM bendruomenės asistentas**. Galiu padėti atsakyti į klausimus apie OpenStreetMap žymėjimą Lietuvoje.
+
+## Ką galiu padėti:
+* 🛣️ **Gatvių žymėjimas** - Kaip teisingai žymėti Lietuvos gatves, prospektus ir kelius
+* 🏠 **Pastatai** - Gyvenamųjų namų, viešųjų pastatų žymėjimas  
+* 📍 **Adresai** - Lietuvos adresų sistema OSM
+* 🚌 **Transportas** - Viešojo transporto, stotelių žymėjimas
+* 📋 **Bendros taisyklės** - OSM standartai Lietuvoje
+
+---
+
+**Svarbu:** Atsakau tik remiantis oficialiais Lietuvos OSM bendruomenės dokumentais. Jei nerasiu atsakymo, nukreipsiu jus į OSM Talk LT bendruomenės forumą.
+
+*Užduokite klausimą apie OSM žymėjimą Lietuvoje!*
+`;
+
+const EXAMPLE_QUESTIONS = [
+  "Kaip žymėti Gedimino prospektą?",
+  "Kokius tag'us naudoti daugiabučiui namui?",
+  "Kaip žymėti autobusų stotelę Vilniuje?",
+];
 
 export const Thread: FC = () => {
   return (
@@ -70,13 +97,22 @@ const ThreadScrollToBottom: FC = () => {
 };
 
 const ThreadWelcome: FC = () => {
+  const [welcomeMessage, setWelcomeMessage] = useState('');
+  useEffect(() => {
+    // React advises to declare the async function directly inside useEffect
+    async function getWelcomeMessage() {
+      const processedContent = await remark()
+          .use(html)
+          .process(WELCOME_MESSAGE);
+      setWelcomeMessage(processedContent.toString());
+    }
+    getWelcomeMessage()
+  }, []);
+
   return (
     <ThreadPrimitive.Empty>
       <div className="flex w-full max-w-[var(--thread-max-width)] flex-grow flex-col">
-        <div className="flex w-full flex-grow flex-col items-center justify-center">
-          <p className="mt-4 font-medium">
-            How can I help you today?
-          </p>
+        <div className="flex w-full flex-grow flex-col items-center justify-center" dangerouslySetInnerHTML={{ __html: welcomeMessage }}>
         </div>
         <ThreadWelcomeSuggestions />
       </div>
@@ -87,26 +123,19 @@ const ThreadWelcome: FC = () => {
 const ThreadWelcomeSuggestions: FC = () => {
   return (
     <div className="mt-3 flex w-full items-stretch justify-center gap-4">
-      <ThreadPrimitive.Suggestion
-        className="hover:bg-muted/80 flex max-w-sm grow basis-0 flex-col items-center justify-center rounded-lg border p-3 transition-colors ease-in"
-        prompt="What is the weather in Tokyo?"
-        method="replace"
-        autoSend
-      >
+      {EXAMPLE_QUESTIONS.map(question => (
+          <ThreadPrimitive.Suggestion
+              key={question}
+              className="hover:bg-muted/80 flex max-w-sm grow basis-0 flex-col items-center justify-center rounded-lg border p-3 transition-colors ease-in"
+              prompt={question}
+              method="replace"
+              autoSend
+          >
         <span className="line-clamp-2 text-ellipsis text-sm font-semibold">
-          What is the weather in Tokyo?
+          {question}
         </span>
-      </ThreadPrimitive.Suggestion>
-      <ThreadPrimitive.Suggestion
-        className="hover:bg-muted/80 flex max-w-sm grow basis-0 flex-col items-center justify-center rounded-lg border p-3 transition-colors ease-in"
-        prompt="What is assistant-ui?"
-        method="replace"
-        autoSend
-      >
-        <span className="line-clamp-2 text-ellipsis text-sm font-semibold">
-          What is assistant-ui?
-        </span>
-      </ThreadPrimitive.Suggestion>
+          </ThreadPrimitive.Suggestion>
+      ))}
     </div>
   );
 };

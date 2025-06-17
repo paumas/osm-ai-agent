@@ -6,7 +6,7 @@ This is a chat assistant for OpenStreetMap (OSM) related questions, built with N
 
 - Node.js (version 18.x or later recommended)
 - npm or yarn
-- An instance of Ollama running locally. Ensure you have pulled a model suitable for chat and embeddings (e.g., `ollama pull llama2` or another model of your choice).
+- An instance of Ollama running locally. Ensure you have pulled a model suitable for chat and embeddings (e.g., `ollama pull llama3` or another model of your choice).
 
 ## Setup
 

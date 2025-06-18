@@ -25,7 +25,7 @@ export async function POST(req: Request) {
     const vectorStore = await getVectorStore();
     if (vectorStore.memoryVectors.length > 0) { // Check if the vector store has been populated
         // Perform similarity search
-        const results = await vectorStore.similaritySearch(userText, 4);
+        const results = await vectorStore.similaritySearch(userText, 2);
 
         if (results && results.length > 0) {
           retrievedContext = results

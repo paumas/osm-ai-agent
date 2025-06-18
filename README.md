@@ -6,7 +6,7 @@ This is a chat assistant for OpenStreetMap (OSM) related questions, built with N
 
 - Node.js (version 20.x or later recommended)
 - npm or yarn
-- An instance of Ollama (https://ollama.com/) running locally. Ensure you have pulled a model suitable for chat and embeddings (e.g., `ollama pull llama3.1:8b` or another model of your choice).
+- An instance of Ollama (https://ollama.com/) running locally. Ensure you have pulled a model suitable for chat and embeddings (e.g., `ollama pull mistral:7b-instruct` or another model of your choice).
 
 ## Setup
 
@@ -23,7 +23,7 @@ This is a chat assistant for OpenStreetMap (OSM) related questions, built with N
     - Ensure you have Ollama installed and running.
     - You can pull a model using:
       ```bash
-      ollama pull llama3.1:8b
+      ollama pull mistral:7b-instruct
       ollama pull bge-m3
       ```
     - Adjust the model name in the code if you are using a different model.

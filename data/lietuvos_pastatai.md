@@ -27,15 +27,4 @@
 - Katalikų bažnyčios: `building=church` + `religion=christian` + `denomination=catholic`
 - Stačiatikių cerkvės: `building=church` + `religion=christian` + `denomination=orthodox`
 
-## Adresai pastatuose
-
-Kiekvienam pastatui pridėti:
-- `addr:housenumber` - namo numeris
-- `addr:street` - gatvė (be genetivo galūnės!)
-- `addr:city` - miestas
-- `addr:postcode` - pašto kodas
-
-### Numeracija korpusams
-- Jei yra korpusai: `addr:housenumber=15` + `addr:unit=A`
-
 Šaltinis: Lietuvos statybos taisyklės ir OSM praktika
